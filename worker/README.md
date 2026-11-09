@@ -195,17 +195,20 @@ MAIL_TO = "natevisionn@gmail.com,orders@getodium.shop"
 | `onboarding@resend.dev` | only the email address on the Resend account |
 | `anything@yourdomain.com` | anyone, once that domain is verified |
 
-You cannot send *from* a Gmail address — Resend only allows senders on a domain whose DNS you control. `natevisionn@gmail.com` goes in `MAIL_TO` and in `reply_to` (the Worker already sets `reply_to` to the buyer's PayPal email), not in `MAIL_FROM`.
+You cannot send *from* a Gmail address — Resend only allows senders on a domain whose DNS you control. `n4tey4130@gmail.com` goes in `MAIL_TO` and in `MAIL_REPLY_TO`, not in `MAIL_FROM`.
 
-**Verify the domain** (one time, ~5 minutes):
+**Current state (done):** `getodium.shop` is added in Resend and its DKIM + SPF records are verified, so the store sends from `Odium <orders@getodium.shop>` and buyers get their own copy. The records live in `worker/resend-dns.txt`.
 
-1. Resend → **Domains → Add Domain** → `getodium.shop`.
-2. It shows a `MX`, an `SPF` `TXT` and a `DKIM` `TXT` (sometimes a `_dmarc`). Add all of them in **Cloudflare → DNS → Records**, proxy **DNS only / grey cloud** for `MX` and `TXT`.
-3. Wait for Resend to show **Verified**.
+**Verify a new domain** (one time, ~5 minutes):
+
+1. Resend → **Domains → Add Domain** → the bare domain.
+2. It shows a `MX`, an `SPF` `TXT`, a `DKIM` `TXT`, and usually an `rsend` `CNAME`. Add all of them in **Cloudflare → DNS → Records**, proxy **DNS only / grey cloud**.
+3. Wait for Resend to show **Verified** (`pending` → `partially_verified` → `verified`; sending works from `partially_verified` once DKIM is green).
 4. Point the sender at it and redeploy:
 
 ```toml
 MAIL_FROM = "Odium <orders@getodium.shop>"
+MAIL_REPLY_TO = "you@your-inbox.com"
 MAIL_BUYER = "true"    # optional: also mail the buyer
 ```
 
@@ -215,7 +218,7 @@ npm.cmd run deploy
 
 Free tier is 3,000 emails/month, 100/day — far past what a $3 product needs.
 
-Tip: Cloudflare **Email Routing** can forward `orders@getodium.shop` into Gmail for free, so the visible sender is your domain and the replies still land in the inbox you actually read.
+Tip: Cloudflare **Email Routing** can forward `orders@getodium.shop` into Gmail for free. It needs the root `MX` only — Resend claims the `send` subdomain, so the two never collide.
 
 ## 8. Local testing
 
