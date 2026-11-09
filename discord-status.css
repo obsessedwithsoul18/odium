@@ -1,0 +1,69 @@
+.discord-presence {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(220, 20, 60, 0.35);
+  border-radius: 999px;
+  background: rgba(220, 20, 60, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.discord-presence-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #80848e;
+}
+
+.discord-presence[data-status="online"] .discord-presence-dot {
+  background: #23a55a;
+  box-shadow: 0 0 0.55rem rgba(35, 165, 90, 0.7);
+}
+
+.discord-presence[data-status="idle"] .discord-presence-dot {
+  background: #f0b232;
+  box-shadow: 0 0 0.55rem rgba(240, 178, 50, 0.7);
+}
+
+.discord-presence[data-status="dnd"] .discord-presence-dot {
+  background: #f23f43;
+  box-shadow: 0 0 0.55rem rgba(242, 63, 67, 0.7);
+}
+
+.discord-presence[data-status="offline"] .discord-presence-dot,
+.discord-presence[data-status="unavailable"] .discord-presence-dot {
+  background: #80848e;
+}
+
+.discord-presence[data-status="loading"] .discord-presence-dot,
+.discord-presence[data-status="reconnecting"] .discord-presence-dot {
+  background: #dc143c;
+  animation: discord-presence-pulse 1.4s ease-in-out infinite;
+}
+
+.discord-activity {
+  max-width: 24rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+@keyframes discord-presence-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discord-presence[data-status="loading"] .discord-presence-dot,
+  .discord-presence[data-status="reconnecting"] .discord-presence-dot {
+    animation: none;
+  }
+}

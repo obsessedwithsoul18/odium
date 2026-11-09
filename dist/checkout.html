@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link href="home.css" rel="stylesheet"/>
+<link href="discord-status.css" rel="stylesheet"/>
+<link href="checkout.css" rel="stylesheet"/>
+<title>Checkout — Retrac External</title>
+<link href="logo.png" rel="icon" type="image/png"/>
+<meta content="website" property="og:type"/>
+<meta content="getodium.shop" property="og:site_name"/>
+<meta content="https://getodium.shop/checkout.html" property="og:url"/>
+<meta content="Checkout — Retrac External" property="og:title"/>
+<meta content="Secure checkout for the Retrac External. Crypto, PayPal, Cash App and card accepted." property="og:description"/>
+<meta content="https://getodium.shop/logo.png" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="#DC143C" name="theme-color"/>
+</head>
+<body class="home-page">
+<div class="grid-bg"></div>
+
+<nav class="home-nav scrolled" id="homeNav">
+  <div class="home-nav-content">
+    <div class="glass-filter"></div>
+    <div class="glass-overlay"></div>
+    <div class="glass-specular"></div>
+    <div class="glass-content glass-content--nav">
+      <a href="index.html"><img class="home-logo" src="logo.png" alt="Odium"/></a>
+      <div class="home-nav-links">
+        <a class="home-nav-link" href="index.html">Home</a>
+        <a class="home-nav-link" href="index.html#features">Features</a>
+        <a class="home-nav-link" href="index.html#faq">FAQ</a>
+        <a class="home-nav-link" href="checkout.html">Checkout</a>
+      </div>
+      <a class="home-nav-btn" href="login.html">
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content">
+          <span>Dashboard</span>
+          <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main class="retrac-page">
+  <div class="retrac-shell">
+
+    <!-- order summary -->
+    <section class="retrac-summary" aria-labelledby="summaryTitle">
+      <p class="retrac-summary-eyebrow">Order summary</p>
+      <h1 class="retrac-summary-title" id="summaryTitle">Retrac External</h1>
+      <p class="retrac-summary-sub">External aimbot and advanced ESP. Read-only memory, no injection, stream-proof overlay, lifetime updates.</p>
+
+      <div class="retrac-summary-price">
+        <span class="retrac-summary-currency">$</span>
+        <span class="retrac-summary-amount" id="priceAmount">3.00</span>
+        <span class="retrac-summary-period">one-time &middot; lifetime license</span>
+      </div>
+
+      <ul class="retrac-includes" id="includesList"></ul>
+
+      <div class="retrac-note">
+        <strong>One product, one price.</strong> No tiers, no renewals, no add-ons. Every payment method below delivers the same license.
+      </div>
+    </section>
+
+    <!-- payment -->
+    <section class="retrac-pay" aria-labelledby="payTitle">
+      <h2 id="payTitle">Payment method</h2>
+      <p class="retrac-pay-sub">Pick a rail. Your order reference is generated automatically and is required to claim the key.</p>
+
+      <div class="retrac-tabs" id="payTabs" role="tablist"></div>
+
+      <div id="payPanes"></div>
+
+      <div class="retrac-steps">
+        <h3>After you pay</h3>
+        <div class="retrac-step"><span class="retrac-step-num">1</span><span>Copy your order reference and include it in the payment note.</span></div>
+        <div class="retrac-step"><span class="retrac-step-num">2</span><span>Open a ticket in Discord and post the reference plus a screenshot of the transaction.</span></div>
+        <div class="retrac-step"><span class="retrac-step-num">3</span><span>Your key is delivered to the ticket and bound to your account on first login.</span></div>
+      </div>
+
+      <a class="retrac-cta retrac-cta--ghost" id="supportLink" href="#" target="_blank" rel="noopener">Open a support ticket</a>
+    </section>
+
+  </div>
+</main>
+
+<footer class="home-footer">
+  <div class="home-footer-content">
+    <div>
+      <img class="home-footer-logo" src="logo.png" alt="Odium"/>
+      <p class="home-footer-desc">Retrac External — a read-only external built for low overhead, clean rendering and long-term stability across game updates.</p>
+      <p class="home-footer-copyright" id="footerCopy">Copyright &copy; 2026 Odium - All Rights Reserved.</p>
+    </div>
+    <div class="home-footer-links">
+      <div class="home-footer-column">
+        <h4>General</h4>
+        <a href="index.html">Home</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="checkout.html">Checkout</a>
+        <a href="login.html">Dashboard</a>
+      </div>
+      <div class="home-footer-column">
+        <h4>Legal</h4>
+        <a href="tos.html">Terms of Service</a>
+        <a href="policy.html">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js?v=5"></script>
+<script src="js/checkout.js?v=5"></script>
+</body>
+</html>

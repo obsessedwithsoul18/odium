@@ -1,0 +1,125 @@
+/* Legal pages — extends home.css. Same dark glass system. */
+
+.legal-page {
+  min-height: 100vh;
+  padding: 8rem 1.5rem 4rem;
+}
+
+.legal-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .legal-shell { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .legal-toc { position: static; }
+}
+
+.legal-toc {
+  position: sticky;
+  top: 7rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(16, 16, 20, 0.5);
+  backdrop-filter: blur(16px);
+  padding: 1.4rem;
+}
+
+.legal-toc h4 {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.9rem;
+  font-weight: 700;
+}
+
+.legal-toc a {
+  display: block;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  padding: 0.35rem 0;
+  line-height: 1.4;
+  transition: color 0.18s;
+}
+
+.legal-toc a:hover { color: var(--home-primary, #dc143c); }
+
+.legal-body {
+  border-radius: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(14, 14, 18, 0.6);
+  backdrop-filter: blur(18px) saturate(160%);
+  padding: 2.75rem;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 620px) {
+  .legal-body { padding: 1.75rem; }
+}
+
+.legal-updated {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.legal-section { margin-bottom: 2.25rem; scroll-margin-top: 7rem; }
+.legal-section:last-child { margin-bottom: 0; }
+
+.legal-section h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.legal-section h3 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin: 1.1rem 0 0.4rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.legal-section p {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: 0.75rem;
+}
+
+.legal-section ul {
+  margin: 0.4rem 0 0.9rem 0;
+  padding-left: 1.15rem;
+}
+
+.legal-section li {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: 0.35rem;
+}
+
+.legal-section strong { color: rgba(255, 255, 255, 0.88); font-weight: 600; }
+
+.legal-section code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82em;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.3rem;
+}
