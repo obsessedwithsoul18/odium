@@ -215,7 +215,13 @@
         return res.json();
       })
       .then(function (info) {
-        return loadPayPalSdk(info.clientId, info.currency).then(function (pp) {
+        var id = String(info.clientId || "");
+        if (!/^A[A-Za-z0-9_-]{10,}$/.test(id)) {
+          throw new Error("the store's PayPal client ID is not a client ID (" +
+            (id ? id.length + " chars, starts \"" + id.slice(0, 4) + "\"" : "empty") +
+            ") — fix PAYPAL_SANDBOX_CLIENT_ID on the API");
+        }
+        return loadPayPalSdk(id, info.currency).then(function (pp) {
           return { pp: pp, info: info };
         });
       })
@@ -247,6 +253,9 @@
         var message = err && err.message ? err.message : "unknown";
         if (message.indexOf("config 404") !== -1) {
           message = "no API on this domain. If the site is on Cloudflare Pages, set payments.paypal.apiBase to the Worker URL in js/config.js.";
+        }
+        if (message.indexOf("SDK blocked") !== -1) {
+          message = "the PayPal script would not load. An ad blocker, a VPN, or a Content-Security-Policy rule is blocking paypal.com.";
         }
         say("PayPal is offline right now. Use another rail, or send your order reference to support. (" + message + ")", "error");
       });
