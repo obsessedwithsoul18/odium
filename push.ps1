@@ -22,9 +22,9 @@ if (Test-Path "scripts/build-pages.mjs") {
   Write-Host "dist/ rebuilt" -ForegroundColor DarkGray
 }
 
-git add -A
+$null = & git add -A 2>&1
 
-$status = @(git status --porcelain)
+$status = @(& git status --porcelain 2>&1 | Where-Object { $_ -is [string] -and $_.Trim() })
 if ($status.Count -eq 0) {
   Write-Host "Nothing to push - working tree is clean." -ForegroundColor Yellow
   exit 0
@@ -35,23 +35,27 @@ if (-not $Message) {
   $Message = "update $count file(s) - $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
 }
 
-git commit -q -m $Message
+$null = & git commit -q -m $Message 2>&1
 if ($LASTEXITCODE -ne 0) {
   Write-Host "Commit failed." -ForegroundColor Red
   exit 1
 }
 
-git push 2>&1 | Out-Host
-if ($LASTEXITCODE -ne 0) {
+$pushOut = & git push 2>&1
+$pushCode = $LASTEXITCODE
+if ($pushCode -ne 0) {
   Write-Host "Retrying with upstream set..." -ForegroundColor DarkGray
-  git push -u origin main 2>&1 | Out-Host
+  $pushOut = & git push -u origin main 2>&1
+  $pushCode = $LASTEXITCODE
 }
 
-if ($LASTEXITCODE -eq 0) {
+if ($pushCode -eq 0) {
   Write-Host ""
   Write-Host "Pushed $count file(s)." -ForegroundColor Green
-  git log --oneline -1
-} else {
-  Write-Host "Push failed - check the remote name and your credentials." -ForegroundColor Red
-  exit 1
+  & git log --oneline -1
+  exit 0
 }
+
+Write-Host "Push failed - check the remote name and your credentials." -ForegroundColor Red
+$pushOut | Out-Host
+exit 1
