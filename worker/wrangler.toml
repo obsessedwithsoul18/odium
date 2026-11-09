@@ -15,7 +15,7 @@ MAIL_TO = "natevisionn@gmail.com"
 
 # Comma separated list of origins allowed to call this API.
 # Your Pages domain, plus the pages.dev preview if you use it.
-CORS_ORIGIN = "https://odium.shop,https://www.odium.shop,http://localhost:8123,http://127.0.0.1:8123"
+CORS_ORIGIN = "https://getodium.shop,https://www.getodium.shop,https://odium.shop,https://www.odium.shop,https://*.pages.dev,http://localhost:8123,http://127.0.0.1:8123"
 
 # Created with: wrangler d1 create retrac-orders
 # Paste the id it prints below, then run: npm run db:init

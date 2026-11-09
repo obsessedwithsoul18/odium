@@ -44,9 +44,27 @@ function allowedOrigins(env) {
     .filter(Boolean);
 }
 
+/**
+ * Exact match, "*", or a wildcard host like "https://*.pages.dev".
+ * A browser origin that is not on the list gets no Access-Control-Allow-Origin,
+ * which surfaces in the console as "Failed to fetch".
+ */
+function originAllowed(env, origin) {
+  if (!origin) return false;
+  for (const entry of allowedOrigins(env)) {
+    if (entry === "*" || entry === origin) return true;
+
+    const wildcard = entry.match(/^(https?):\/\/\*\.(.+)$/);
+    if (wildcard) {
+      const [scheme, host] = origin.split("://");
+      if (scheme === wildcard[1] && host && host.endsWith(`.${wildcard[2]}`)) return true;
+    }
+  }
+  return false;
+}
+
 function corsHeaders(env, request) {
   const origin = request.headers.get("Origin") || "";
-  const list = allowedOrigins(env);
   const headers = {
     Vary: "Origin",
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
@@ -54,7 +72,7 @@ function corsHeaders(env, request) {
     "Access-Control-Max-Age": "86400",
   };
   if (!origin) return headers;
-  if (list.includes(origin) || list.includes("*")) {
+  if (originAllowed(env, origin)) {
     headers["Access-Control-Allow-Origin"] = origin;
   }
   return headers;
