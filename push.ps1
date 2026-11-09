@@ -7,7 +7,7 @@
 
 param([string]$Message = "")
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 Set-Location -LiteralPath $PSScriptRoot
 
 if (-not (Test-Path ".git")) {
