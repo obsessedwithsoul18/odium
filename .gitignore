@@ -1,0 +1,13 @@
+# dependencies
+node_modules/
+
+# secrets — never commit
+.env
+.dev.vars
+*.pem
+*.key
+
+# local state
+server/data/
+.wrangler/
+*.log

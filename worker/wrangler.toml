@@ -1,0 +1,28 @@
+name = "retrac-api"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# Plain values. Secrets do NOT go here — use `wrangler secret put NAME`
+# or the dashboard (Workers & Pages -> retrac-api -> Settings -> Variables and Secrets).
+[vars]
+PAYPAL_MODE = "sandbox"
+PRICE = "3.00"
+CURRENCY = "USD"
+BRAND_NAME = "Odium"
+SITE_URL = "https://odium.shop"
+MAIL_FROM = "onboarding@resend.dev"
+MAIL_TO = "natevisionn@gmail.com"
+
+# Comma separated list of origins allowed to call this API.
+# Your Pages domain, plus the pages.dev preview if you use it.
+CORS_ORIGIN = "https://odium.shop,https://www.odium.shop,http://localhost:8123,http://127.0.0.1:8123"
+
+# Created with: wrangler d1 create retrac-orders
+# Paste the id it prints below, then run: npm run db:init
+[[d1_databases]]
+binding = "DB"
+database_name = "retrac-orders"
+database_id = "c22be524-719e-4c66-b998-3eb90d1999aa"
+
+[observability]
+enabled = true

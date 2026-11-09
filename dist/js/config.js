@@ -63,8 +63,10 @@ window.RETRAC_CONFIG = {
       // "link"  -> paypal.me link, live accounts only, matched by hand
       // "email" -> print the address and wait for a manual transfer
       mode: "sdk",
-      // "" = same origin as the site. Set a full URL only when the API is hosted elsewhere.
-      apiBase: "",
+      // "" = same origin as the site (the Express app in server/ serves both).
+      // On Cloudflare Pages the API is a separate Worker — paste its URL here:
+      // "https://retrac-api.your-subdomain.workers.dev"
+      apiBase: "https://retrac-api.natevisionn.workers.dev",
       link: "https://paypal.me/REPLACE_ME/3.00",
       email: "REPLACE_PAYPAL_EMAIL",
       // Fallback note shown in link/email modes.

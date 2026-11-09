@@ -13,7 +13,9 @@ export class PayPalError extends Error {
   }
 }
 
-const base = () => HOSTS[env.mode];
+export const apiBase = () => HOSTS[env.mode];
+
+const base = apiBase;
 
 let cached = { token: "", expiresAt: 0 };
 
@@ -42,8 +44,7 @@ async function getToken() {
   return cached.token;
 }
 
-async function call(path, { method = "GET", body, requestId } = {}) {
-  const token = await getToken();
+async function call(path, { method = "GET", body, requestId } = {}) {  const token = await getToken();
   const headers = {
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
@@ -69,7 +70,26 @@ async function call(path, { method = "GET", body, requestId } = {}) {
 }
 
 /**
- * Creates a CAPTURE order for one unit at the configured price.
+ * Credential probe used by `npm run check`. Hits the token endpoint for the
+ * CURRENT mode, so a live id in sandbox mode fails here instead of at checkout.
+ */
+export async function selfTest() {
+  const auth = Buffer.from(`${env.paypal.clientId}:${env.paypal.secret}`).toString("base64");
+  const res = await fetch(`${apiBase()}/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+  });
+  const text = await res.text();
+  if (!res.ok) throw new PayPalError(`auth ${res.status}`, text);
+  const json = JSON.parse(text);
+  return { appId: json.app_id || "", expiresIn: Number(json.expires_in) || 0 };
+}
+
+/**
  * `reference` is our RET-XXXXXX ticket and round-trips through custom_id.
  */
 export async function createOrder({ reference, description }) {

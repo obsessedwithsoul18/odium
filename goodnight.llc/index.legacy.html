@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="home.css" rel="stylesheet" />
+  <link href="logo.png" rel="icon" type="image/png" />
+  <title>Odium</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="odium.shop" />
+  <meta property="og:url" content="https://odium.shop" />
+  <meta property="og:title" content="Odium - Your hidden skill" />
+  <meta property="og:description" content="A secure, ultra-optimized streamable closet script loaded with advanced features — delivering smooth performance and complete privacy." />
+  <meta property="og:image" content="https://odium.shop/logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#DC143C" />
+</head>
+<body class="home-page">
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;">
+    <defs>
+      <filter id="lg-dist" width="200%" height="200%" x="-50%" y="-50%">
+        <feTurbulence baseFrequency="0.006 0.006" numOctaves="2" result="noise" seed="92" type="fractalNoise" />
+        <feGaussianBlur in="noise" result="blurred" stdDeviation="3" />
+        <feDisplacementMap in="SourceGraphic" in2="blurred" scale="40" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <filter id="lg-dist-subtle" width="200%" height="200%" x="-50%" y="-50%">
+        <feTurbulence baseFrequency="0.003 0.003" numOctaves="1" result="noise" seed="92" type="fractalNoise" />
+        <feGaussianBlur in="noise" result="blurred" stdDeviation="4" />
+        <feDisplacementMap in="SourceGraphic" in2="blurred" scale="15" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="grid-bg"></div>
+
+  <nav class="home-nav" id="homeNav">
+    <div class="home-nav-content">
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="glass-content glass-content--nav">
+        <img class="home-logo" src="logo.png" alt="Odium logo" />
+        <div class="home-nav-links">
+          <a class="home-nav-link" href="#home">Home</a>
+          <a class="home-nav-link" href="#features">Features</a>
+          <a class="home-nav-link" href="#faq">FAQ</a>
+          <a class="home-nav-link" href="#purchase">Purchase</a>
+        </div>
+        <a class="home-nav-btn" href="login.html">
+          <div class="glass-overlay"></div>
+          <div class="glass-specular"></div>
+          <div class="glass-content">
+            <span>Dashboard</span>
+            <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </div>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="home-hero" id="home">
+    <h1 class="home-hero-title">Your hidden skill, <span class="home-gradient-text">odium.</span></h1>
+    <p class="home-hero-subtitle">A secure, ultra-optimized streamable closet script loaded with advanced features — delivering smooth performance and complete privacy.</p>
+    <div class="home-hero-buttons">
+      <a class="home-btn-discord" href="https://discord.gg/odium" target="_blank">
+        <div class="glass-overlay glass-overlay--primary"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--btn">
+          <span>Join Discord</span>
+          <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </div>
+      </a>
+    </div>
+  </section>
+  <section class="odium-features" id="features">
+    <div class="odium-section-header">
+      <div class="odium-section-badge">
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2v20M2 12h20"></path>
+        </svg>
+        <span>Features</span>
+      </div>
+      <h2 class="odium-section-title">Built for <span class="home-gradient-text">performance</span></h2>
+      <p class="odium-section-subtitle">Everything you need, nothing you don't.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="bento-card odium-feature-card">
+        <div class="bento-card-border-beam">
+          <div class="border-beam-path">
+            <div class="border-beam-light"></div>
+          </div>
+        </div>
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--card">
+          <div class="odium-feature-icon">
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+          </div>
+          <h3 class="odium-feature-title">Silent Aim</h3>
+          <p class="odium-feature-desc">Precision targeting with configurable hit chance, prediction, and auto-prediction.</p>
+        </div>
+      </div>
+
+      <div class="bento-card odium-feature-card">
+        <div class="bento-card-border-beam">
+          <div class="border-beam-path">
+            <div class="border-beam-light"></div>
+          </div>
+        </div>
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--card">
+          <div class="odium-feature-icon">
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <h3 class="odium-feature-title">Box ESP</h3>
+          <p class="odium-feature-desc">2D and 3D box highlighting with customizable colors and transparency.</p>
+        </div>
+      </div>
+
+      <div class="bento-card odium-feature-card">
+        <div class="bento-card-border-beam">
+          <div class="border-beam-path">
+            <div class="border-beam-light"></div>
+          </div>
+        </div>
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--card">
+          <div class="odium-feature-icon">
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+          </div>
+          <h3 class="odium-feature-title">Trigger Bot</h3>
+          <p class="odium-feature-desc">Automatic firing when your crosshair is over an enemy target.</p>
+        </div>
+      </div>
+
+      <div class="bento-card odium-feature-card">
+        <div class="bento-card-border-beam">
+          <div class="border-beam-path">
+            <div class="border-beam-light"></div>
+          </div>
+        </div>
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--card">
+          <div class="odium-feature-icon">
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h3 class="odium-feature-title">Raid Awareness</h3>
+          <p class="odium-feature-desc">Stay aware of nearby threats with visual and audio indicators.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="founder-section" id="founder">
+    <div class="bento-card ceo-founder-card ceo-founder-card--featured">
+      <div class="bento-card-border-beam">
+        <div class="border-beam-path">
+          <div class="border-beam-light"></div>
+        </div>
+      </div>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="glass-content glass-content--card">
+        <div class="ceo-founder-inner">
+          <img alt="dx5c" class="ceo-founder-image" src="plug.png" />
+          <p class="ceo-founder-name">dx5c</p>
+          <p class="ceo-founder-role">Founder</p>
+          <div class="ceo-contact-buttons">
+            <a class="ceo-contact-btn" href="https://discord.com/users/dx5c" target="_blank">
+              <svg fill="currentColor" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"></path>
+              </svg>
+              <span>dx5c</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="home-pricing" id="purchase">
+    <div class="odium-section-header">
+      <div class="odium-section-badge">
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span>Pricing</span>
+      </div>
+      <h2 class="odium-section-title">Choose your <span class="home-gradient-text">plan</span></h2>
+      <p class="odium-section-subtitle">Simple, transparent pricing with no hidden fees.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="bento-card home-pricing-card">
+        <div class="bento-card-border-beam">
+          <div class="border-beam-path">
+            <div class="border-beam-light"></div>
+          </div>
+        </div>
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--pricing">
+          <div class="home-pricing-header">
+            <h3>Standard Access</h3>
+            <div class="home-pricing-price">
+              <span class="home-pricing-currency">$</span>
+              <span class="home-pricing-amount">9.99</span>
+            </div>
+            <p class="home-pricing-period">One-time payment • Lifetime access</p>
+          </div>
+          <div class="home-pricing-features">
+            <div class="home-pricing-feature">
+              <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Core Features</span>
+            </div>
+            <div class="home-pricing-feature">
+              <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Standard HWID Resets</span>
+            </div>
+            <div class="home-pricing-feature">
+              <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Discord Role</span>
+            </div>
+          </div>
+          <div class="home-pricing-buttons">
+            <a class="home-pricing-btn home-pricing-btn--crypto" href="https://goodnightcc.mysellauth.com/" target="_blank">
+              <div class="home-pricing-btn-left">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>Purchase with Crypto</span>
+              </div>
+              <span class="home-pricing-btn-price">$9.99</span>
+            </a>
+            <a class="home-pricing-btn home-pricing-btn--other" href="resellers.html">
+              <div class="home-pricing-btn-left">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <rect height="14" rx="2" width="20" x="2" y="7"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+                <span>PayPal, Venmo, Cashapp</span>
+              </div>
+              <span class="home-pricing-btn-price">Via Resellers</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="bento-card home-pricing-card home-pricing-card--featured">
+        <div class="bento-card-border-beam">
+          <div class="border-beam-path">
+            <div class="border-beam-light"></div>
+          </div>
+        </div>
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--pricing">
+          <div class="home-pricing-badge home-pricing-badge--featured">Most Popular</div>
+          <div class="home-pricing-header">
+            <h3>Premium Access</h3>
+            <div class="home-pricing-price">
+              <span class="home-pricing-currency">$</span>
+              <span class="home-pricing-amount">14.99</span>
+            </div>
+            <p class="home-pricing-period">One-time payment • Lifetime access</p>
+          </div>
+          <div class="home-pricing-features">
+            <div class="home-pricing-feature">
+              <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>All Features</span>
+            </div>
+            <div class="home-pricing-feature">
+              <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Faster HWID Resets</span>
+            </div>
+            <div class="home-pricing-feature">
+              <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Premium Discord Role</span>
+            </div>
+            <div class="home-pricing-feature">
+              <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>One-Time Key Transfer</span>
+            </div>
+          </div>
+          <div class="home-pricing-buttons">
+            <a class="home-pricing-btn home-pricing-btn--crypto" href="https://goodnightcc.mysellauth.com/" target="_blank">
+              <div class="home-pricing-btn-left">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>Purchase with Crypto</span>
+              </div>
+              <span class="home-pricing-btn-price">$14.99</span>
+            </a>
+            <a class="home-pricing-btn home-pricing-btn--other" data-purchase="robux-gift" href="#">
+              <div class="home-pricing-btn-left">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <rect height="14" rx="2" width="20" x="2" y="5"></rect>
+                  <path d="M2 10h20"></path>
+                </svg>
+                <span>Robux / Gift Card</span>
+              </div>
+              <span class="home-pricing-btn-price">R$3.5K / €20</span>
+            </a>
+            <a class="home-pricing-btn home-pricing-btn--other" href="resellers.html">
+              <div class="home-pricing-btn-left">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <rect height="14" rx="2" width="20" x="2" y="5"></rect>
+                  <path d="M2 10h20"></path>
+                </svg>
+                <span>PayPal, Venmo, Cashapp</span>
+              </div>
+              <span class="home-pricing-btn-price">Via Resellers</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="home-faq" id="faq">
+    <div class="odium-section-header">
+      <div class="odium-section-badge">
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>FAQ</span>
+      </div>
+      <h2 class="odium-section-title">Frequently <span class="home-gradient-text">asked</span></h2>
+      <p class="odium-section-subtitle">Common questions about Odium.</p>
+    </div>
+
+    <div class="faq-grid">
+      <div class="home-faq-item">
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--faq">
+          <button class="home-faq-question">
+            <span>What is Odium?</span>
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="home-faq-answer">Odium is a secure, ultra-optimized streamable closet script with advanced features for smooth performance and complete privacy.</div>
+        </div>
+      </div>
+
+      <div class="home-faq-item">
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--faq">
+          <button class="home-faq-question">
+            <span>How do I purchase?</span>
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="home-faq-answer">You can purchase Odium with crypto directly, or through our trusted resellers for PayPal, Venmo, and Cashapp.</div>
+        </div>
+      </div>
+
+      <div class="home-faq-item">
+        <div class="glass-filter"></div>
+        <div class="glass-overlay"></div>
+        <div class="glass-specular"></div>
+        <div class="glass-content glass-content--faq">
+          <button class="home-faq-question">
+            <span>Are refunds available?</span>
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="home-faq-answer">All purchases are final. We do not offer refunds for any reason.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="home-footer">
+    <div class="home-footer-content">
+      <div>
+        <img class="home-footer-logo" src="logo.png" alt="Odium" />
+        <p class="home-footer-desc">A privacy- and security-first service, built to safeguard your data while delivering ultra-optimized scripts, advanced protections, and seamless cloud configurations for a smooth, worry-free experience.</p>
+        <p class="home-footer-copyright">Copyright © 2026 Odium - All Rights Reserved.</p>
+      </div>
+      <div class="home-footer-links">
+        <div class="home-footer-column">
+          <h4>General</h4>
+          <a href="#home">Home</a>
+          <a href="#features">Features</a>
+          <a href="#faq">FAQ</a>
+          <a href="#purchase">Purchase</a>
+          <a href="login.html">Dashboard</a>
+        </div>
+        <div class="home-footer-column">
+          <h4>Legal</h4>
+          <a href="tos.html">Terms of Service</a>
+          <a href="policy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="purchase-modal" id="purchaseModal">
+    <div class="purchase-modal-overlay"></div>
+    <div class="purchase-modal-content">
+      <button class="purchase-modal-close" id="closeModal">
+        <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <line x1="18" x2="6" y1="6" y2="18"></line>
+          <line x1="6" x2="18" y1="6" y2="18"></line>
+        </svg>
+      </button>
+      <h3 class="purchase-modal-title" id="modalTitle">Choose Payment Method</h3>
+      <div class="purchase-modal-buttons" id="modalButtons"></div>
+    </div>
+  </div>
+
+  <script src="js/home.js"></script>
+</body>
+</html>

@@ -244,8 +244,11 @@
         }).render(mount);
       })
       .catch(function (err) {
-        say("PayPal is offline right now. Use another rail, or send your order reference to support. (" +
-          (err && err.message ? err.message : "unknown") + ")", "error");
+        var message = err && err.message ? err.message : "unknown";
+        if (message.indexOf("config 404") !== -1) {
+          message = "no API on this domain. If the site is on Cloudflare Pages, set payments.paypal.apiBase to the Worker URL in js/config.js.";
+        }
+        say("PayPal is offline right now. Use another rail, or send your order reference to support. (" + message + ")", "error");
       });
   }
 

@@ -22,7 +22,9 @@ Current state: **one product** (Retrac External, $3.00 lifetime), **four payment
 | `js/discord-status.js` | Live Discord presence for the founder card |
 | `checkout.css` / `legal.css` | Styles for the new pages, extends `home.css` |
 | `server/` | Optional Node backend: PayPal orders, capture, receipt email |
+| `worker/` | The same backend as a Cloudflare Worker (Pages + Worker setup) |
 | `SETUP.md` | This document |
+| `PAYPAL-SETUP.md` | Step-by-step PayPal: sandbox with a fake card, then live |
 
 Nothing is built. Open `index.html` through any static host or a local server (`python -m http.server 8123`) and it runs. The `server/` folder is only needed for PayPal Smart Buttons — `cd server && npm install && npm start` serves the same site on port 3000 with the API attached.
 
@@ -146,6 +148,8 @@ Point the processor's IPN URL at `https://your-host/webhook`, put the secret in 
 ---
 
 ## 4. PayPal
+
+Full walkthrough with every value you have to paste, including the sandbox fake card and the live cutover: **`PAYPAL-SETUP.md`**. This section is the short version.
 
 There are two ways to take PayPal here. Both live in `js/config.js` under `payments.paypal.mode`.
 
