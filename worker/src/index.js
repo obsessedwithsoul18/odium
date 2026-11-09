@@ -323,10 +323,28 @@ function receipt(env, capture, ref) {
   };
 }
 
+/**
+ * MAIL_TO accepts a comma separated list, so a receipt can land in more than one
+ * inbox. MAIL_BUYER="true" also copies the payer — that only works once a domain
+ * is verified in Resend, because resend.dev cannot deliver to third parties.
+ */
+function mailRecipients(env, capture) {
+  const list = String(env.MAIL_TO || "natevisionn@gmail.com")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const wantBuyer = String(env.MAIL_BUYER || "").toLowerCase() === "true";
+  if (wantBuyer && capture.payerEmail) list.push(capture.payerEmail);
+
+  return [...new Set(list)];
+}
+
 async function sendReceipt(env, capture, ref) {
   if (!env.RESEND_API_KEY) return { ok: false, error: "RESEND_API_KEY missing" };
 
   const mail = receipt(env, capture, ref);
+  const to = mailRecipients(env, capture);
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -335,7 +353,7 @@ async function sendReceipt(env, capture, ref) {
     },
     body: JSON.stringify({
       from: env.MAIL_FROM || "onboarding@resend.dev",
-      to: [env.MAIL_TO || "natevisionn@gmail.com"],
+      to,
       reply_to: capture.payerEmail || undefined,
       subject: mail.subject,
       text: mail.text,

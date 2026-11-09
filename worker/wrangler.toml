@@ -9,9 +9,18 @@ PAYPAL_MODE = "sandbox"
 PRICE = "3.00"
 CURRENCY = "USD"
 BRAND_NAME = "Odium"
-SITE_URL = "https://odium.shop"
-MAIL_FROM = "onboarding@resend.dev"
+SITE_URL = "https://getodium.shop"
+
+# Where receipts are emailed. Comma separated for more than one inbox.
 MAIL_TO = "natevisionn@gmail.com"
+
+# Sender shown to the buyer. "onboarding@resend.dev" only delivers to the Resend
+# account owner's own address. Once a domain is verified in Resend, set this to
+# something on it, e.g. "Odium <orders@getodium.shop>", and any recipient works.
+MAIL_FROM = "onboarding@resend.dev"
+
+# "true" also sends a copy to the buyer's PayPal email. Requires a verified domain.
+MAIL_BUYER = "false"
 
 # Comma separated list of origins allowed to call this API.
 # Your Pages domain, plus the pages.dev preview if you use it.
