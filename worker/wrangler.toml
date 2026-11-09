@@ -2,40 +2,32 @@ name = "retrac-api"
 main = "src/index.js"
 compatibility_date = "2025-06-01"
 
-# Plain values. Secrets do NOT go here — use `wrangler secret put NAME`
-# or the dashboard (Workers & Pages -> retrac-api -> Settings -> Variables and Secrets).
 [vars]
 PAYPAL_MODE = "sandbox"
-PRICE = "3.00"
-CURRENCY = "USD"
-BRAND_NAME = "Odium"
-SITE_URL = "https://getodium.shop"
-
-# Where receipts are emailed. Comma separated for more than one inbox.
-# onboarding@resend.dev can only deliver to the address on the Resend account,
-# which is currently n4tey4130@gmail.com. After verifying getodium.shop in
-# Resend (Domains -> Add Domain -> DNS records), switch this back to
-# natevisionn@gmail.com or orders@getodium.shop.
-MAIL_TO = "n4tey4130@gmail.com"
-
-# Sender shown to the buyer. "onboarding@resend.dev" only delivers to the Resend
-# account owner's own address. Once a domain is verified in Resend, set this to
-# something on it, e.g. "Odium <orders@getodium.shop>", and any recipient works.
-MAIL_FROM = "onboarding@resend.dev"
-
-# "true" also sends a copy to the buyer's PayPal email. Requires a verified domain.
-MAIL_BUYER = "false"
-
-# Comma separated list of origins allowed to call this API.
-# Your Pages domain, plus the pages.dev preview if you use it.
+PRICE       = "3.00"
+CURRENCY    = "USD"
+BRAND_NAME  = "Odium"
+SITE_URL    = "https://getodium.shop"
+BUILD       = "v1.0.0"
+MAIL_TO     = "n4tey4130@gmail.com"
+MAIL_FROM   = "onboarding@resend.dev"
 CORS_ORIGIN = "https://getodium.shop,https://www.getodium.shop,https://odium.shop,https://www.odium.shop,https://*.pages.dev,http://localhost:8123,http://127.0.0.1:8123"
 
-# Created with: wrangler d1 create retrac-orders
-# Paste the id it prints below, then run: npm run db:init
+# Secrets (set with `wrangler secret put NAME`):
+#   HWID_SALT, WH_SECRET, RESEND_KEY, DISCORD_BOT_TOKEN, ADMIN_SECRET
+#   PAYPAL_SANDBOX_CLIENT_ID, PAYPAL_SANDBOX_SECRET
+#   PAYPAL_LIVE_CLIENT_ID, PAYPAL_LIVE_SECRET
+
+# Licensing D1 — has orders + licenses + sessions + builds tables
 [[d1_databases]]
-binding = "DB"
-database_name = "retrac-orders"
-database_id = "c22be524-719e-4c66-b998-3eb90d1999aa"
+binding       = "DB"
+database_name = "licdb"
+database_id   = "9429980a-51fa-4c49-85a7-75c3f212d260"
+
+# R2 bucket for encrypted cheat binaries
+[[r2_buckets]]
+binding     = "R2"
+bucket_name = "payloads"
 
 [observability]
 enabled = true
