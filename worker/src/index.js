@@ -911,9 +911,27 @@ export default {
 
       // ── PayPal endpoints ────────────────────────────────────────────
       if (path === '/api/health' && method === 'GET')
-        return respond(env, request, { ok: true, mode: ppCreds(env).mode, price: env.PRICE });
+        return respond(env, request, { ok: true, mode: ppCreds(env).mode, price: env.PRICE, build: env.BUILD || '' });
 
       if (path === '/api/paypal/config'  && method === 'GET')  return handlePayPalConfig(request, env);
+
+      // Diagnostic: what the runtime actually sees. Lengths and prefixes only —
+      // never values, never secret names.
+      if (path === '/api/diag' && method === 'GET') {
+        const c = ppCreds(env);
+        return respond(env, request, {
+          worker: 'retrac-api',
+          build: env.BUILD || '',
+          paypal: {
+            mode: c.mode,
+            clientIdLen: String(c.clientId || '').length,
+            clientIdPrefix: String(c.clientId || '').slice(0, 6),
+            secretLen: String(c.secret || '').length,
+            webhookIdSet: Boolean(c.webhookId),
+          },
+          mail: { to: env.MAIL_TO || '', from: env.MAIL_FROM || '', resendKeySet: Boolean(env.RESEND_KEY || env.RESEND_API_KEY) },
+        });
+      }
       if (path === '/api/paypal/order'   && method === 'POST') return handlePayPalOrder(request, env);
       if (path === '/api/paypal/capture' && method === 'POST') return handlePayPalCapture(request, env);
       if (path === '/api/paypal/webhook' && method === 'POST') return handlePayPalWebhook(request, env, ctx);
