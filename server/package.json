@@ -1,0 +1,19 @@
+{
+  "name": "retrac-checkout",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "PayPal orders, capture and payment email for the Retrac storefront.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.14"
+  }
+}
