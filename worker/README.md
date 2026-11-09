@@ -74,7 +74,17 @@ and paste that uuid into `wrangler.toml`. Until a real uuid is in there, `db:ini
 
 ## 3. Put the secrets in Cloudflare
 
-Run these one at a time. Each prompts for the value and stores it encrypted.
+**Fastest path — one script, one file:**
+
+```powershell
+cd worker
+.\push-secrets.ps1 -Edit     # creates and opens .dev.vars
+.\push-secrets.ps1           # uploads every filled value + verifies the endpoint
+```
+
+Only the keys with a value are uploaded, so an empty line never becomes an empty secret. The script ends by calling `/api/paypal/config` and telling you which of the three failure states you are in.
+
+**Or do it by hand**, one at a time. Each prompts for the value and stores it encrypted.
 
 ```powershell
 npx wrangler secret put PAYPAL_SANDBOX_CLIENT_ID
