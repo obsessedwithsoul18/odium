@@ -21,6 +21,7 @@ const SKIP_DIRS = new Set([
   "node_modules",
   "server",
   "worker",
+  "licensing-worker",
   "bot",
   "tools",
   "scripts",

@@ -1,0 +1,13 @@
+# Local development only. `wrangler dev` reads this file.
+# NEVER commit it — it is in .gitignore. Production secrets live in the
+# Cloudflare dashboard or via `wrangler secret put`.
+
+PAYPAL_SANDBOX_CLIENT_ID=
+PAYPAL_SANDBOX_SECRET=
+PAYPAL_SANDBOX_WEBHOOK_ID=
+PAYPAL_LIVE_CLIENT_ID=
+PAYPAL_LIVE_SECRET=
+PAYPAL_LIVE_WEBHOOK_ID=
+RESEND_API_KEY=
+# ^ resend.com -> API Keys -> Create -> copy re_...  (sender/recipient addresses
+#   are NOT secrets: they live in wrangler.toml [vars] as MAIL_FROM / MAIL_TO)

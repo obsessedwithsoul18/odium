@@ -1,0 +1,50 @@
+name = "odium-api"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# -----------------------------------------------------------------------
+# Plain vars — no secrets. All secrets go through `wrangler secret put`.
+#
+# Required secrets:
+#   wrangler secret put HWID_SALT          # 32+ random bytes, base64
+#   wrangler secret put WH_SECRET          # storefront webhook signing secret
+#   wrangler secret put RESEND_KEY         # Resend API key
+#   wrangler secret put PAYPAL_SANDBOX_CLIENT_ID
+#   wrangler secret put PAYPAL_SANDBOX_SECRET
+#   wrangler secret put PAYPAL_LIVE_CLIENT_ID
+#   wrangler secret put PAYPAL_LIVE_SECRET
+#   wrangler secret put DISCORD_BOT_TOKEN  # for DM delivery (optional)
+# -----------------------------------------------------------------------
+
+[vars]
+PAYPAL_MODE = "sandbox"
+PRICE       = "3.00"
+CURRENCY    = "USD"
+BRAND_NAME  = "Odium"
+SITE_URL    = "https://getodium.shop"
+MAIL_FROM   = "keys@getodium.shop"
+MAIL_TO     = "natevisionn@gmail.com"
+BUILD       = "v1.0.0"
+
+CORS_ORIGIN = "https://getodium.shop,https://www.getodium.shop,http://localhost:8123"
+
+# -----------------------------------------------------------------------
+# D1 — run after first deploy:
+#   wrangler d1 create licdb
+#   wrangler d1 execute licdb --file=schema.sql --remote
+# -----------------------------------------------------------------------
+[[d1_databases]]
+binding     = "DB"
+database_name = "licdb"
+database_id = "REPLACE_WITH_YOUR_D1_ID"
+
+# -----------------------------------------------------------------------
+# R2 — run once:
+#   wrangler r2 bucket create payloads
+# -----------------------------------------------------------------------
+[[r2_buckets]]
+binding     = "R2"
+bucket_name = "payloads"
+
+[observability]
+enabled = true

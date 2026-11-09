@@ -74,7 +74,17 @@ and paste that uuid into `wrangler.toml`. Until a real uuid is in there, `db:ini
 
 ## 3. Put the secrets in Cloudflare
 
-**Fastest path — one script, one file:**
+**The PayPal pair — one script, two pastes:**
+
+```powershell
+cd worker
+.\paypal-keys.ps1            # sandbox
+.\paypal-keys.ps1 -Live      # live
+```
+
+It asks for the Client ID and the Secret, saves them to `.dev.vars`, uploads them as encrypted secrets, sets `PAYPAL_MODE`, deploys, and polls `/api/paypal/config` until it answers 200.
+
+**Fastest path for everything else — one script, one file:**
 
 ```powershell
 cd worker

@@ -1,50 +1,41 @@
-name = "odium-api"
+name = "retrac-api"
 main = "src/index.js"
 compatibility_date = "2025-06-01"
 
-# -----------------------------------------------------------------------
-# Plain vars — no secrets. All secrets go through `wrangler secret put`.
-#
-# Required secrets:
-#   wrangler secret put HWID_SALT          # 32+ random bytes, base64
-#   wrangler secret put WH_SECRET          # storefront webhook signing secret
-#   wrangler secret put RESEND_KEY         # Resend API key
-#   wrangler secret put PAYPAL_SANDBOX_CLIENT_ID
-#   wrangler secret put PAYPAL_SANDBOX_SECRET
-#   wrangler secret put PAYPAL_LIVE_CLIENT_ID
-#   wrangler secret put PAYPAL_LIVE_SECRET
-#   wrangler secret put DISCORD_BOT_TOKEN  # for DM delivery (optional)
-# -----------------------------------------------------------------------
-
+# Plain values. Secrets do NOT go here — use `wrangler secret put NAME`
+# or the dashboard (Workers & Pages -> retrac-api -> Settings -> Variables and Secrets).
 [vars]
 PAYPAL_MODE = "sandbox"
-PRICE       = "3.00"
-CURRENCY    = "USD"
-BRAND_NAME  = "Odium"
-SITE_URL    = "https://getodium.shop"
-MAIL_FROM   = "keys@getodium.shop"
-MAIL_TO     = "natevisionn@gmail.com"
-BUILD       = "v1.0.0"
+PRICE = "3.00"
+CURRENCY = "USD"
+BRAND_NAME = "Odium"
+SITE_URL = "https://getodium.shop"
 
-CORS_ORIGIN = "https://getodium.shop,https://www.getodium.shop,http://localhost:8123"
+# Where receipts are emailed. Comma separated for more than one inbox.
+# onboarding@resend.dev can only deliver to the address on the Resend account,
+# which is currently n4tey4130@gmail.com. After verifying getodium.shop in
+# Resend (Domains -> Add Domain -> DNS records), switch this back to
+# natevisionn@gmail.com or orders@getodium.shop.
+MAIL_TO = "n4tey4130@gmail.com"
 
-# -----------------------------------------------------------------------
-# D1 — run after first deploy:
-#   wrangler d1 create licdb
-#   wrangler d1 execute licdb --file=schema.sql --remote
-# -----------------------------------------------------------------------
+# Sender shown to the buyer. "onboarding@resend.dev" only delivers to the Resend
+# account owner's own address. Once a domain is verified in Resend, set this to
+# something on it, e.g. "Odium <orders@getodium.shop>", and any recipient works.
+MAIL_FROM = "onboarding@resend.dev"
+
+# "true" also sends a copy to the buyer's PayPal email. Requires a verified domain.
+MAIL_BUYER = "false"
+
+# Comma separated list of origins allowed to call this API.
+# Your Pages domain, plus the pages.dev preview if you use it.
+CORS_ORIGIN = "https://getodium.shop,https://www.getodium.shop,https://odium.shop,https://www.odium.shop,https://*.pages.dev,http://localhost:8123,http://127.0.0.1:8123"
+
+# Created with: wrangler d1 create retrac-orders
+# Paste the id it prints below, then run: npm run db:init
 [[d1_databases]]
-binding     = "DB"
-database_name = "licdb"
-database_id = "REPLACE_WITH_YOUR_D1_ID"
-
-# -----------------------------------------------------------------------
-# R2 — run once:
-#   wrangler r2 bucket create payloads
-# -----------------------------------------------------------------------
-[[r2_buckets]]
-binding     = "R2"
-bucket_name = "payloads"
+binding = "DB"
+database_name = "retrac-orders"
+database_id = "c22be524-719e-4c66-b998-3eb90d1999aa"
 
 [observability]
 enabled = true
