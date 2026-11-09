@@ -205,6 +205,51 @@
       status.textContent = text;
     };
 
+    var lastOrderId = null;
+    var settled = false;
+
+    function settle(data) {
+      settled = true;
+      renderPaid(mount, status, data);
+    }
+
+    // The popup can close, the tab can be blocked, the buyer can walk away on
+    // the PayPal "you're done" screen — in all three cases the money may have
+    // already left. Ask PayPal what actually happened instead of guessing.
+    function reconcile(reason) {
+      if (settled) return Promise.resolve(true);
+      if (!lastOrderId) {
+        if (reason === "cancel") say("Payment cancelled. Nothing was charged.", "quiet");
+        return Promise.resolve(false);
+      }
+      say("Confirming with PayPal…", "quiet");
+      return postJson(base + "/api/paypal/reconcile", { orderId: lastOrderId, reference: ORDER_REF })
+        .then(function (d) {
+          if (d && d.paid) { settle(d); return true; }
+          if (reason === "cancel") say("Payment cancelled. Nothing was charged.", "quiet");
+          else say("PayPal has no completed payment for this order yet (" + String(d && d.status || "unknown").toLowerCase() + "). Nothing was charged.", "quiet");
+          return false;
+        })
+        .catch(function (err) {
+          say("Could not reach the store to check this order: " +
+            (err && err.message ? err.message : "unknown") + ". If PayPal shows a payment, keep the reference " + ORDER_REF + " and send it to support.", "error");
+          return false;
+        });
+    }
+
+    function checkButton() {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "retrac-copy";
+      b.style.marginTop = "10px";
+      b.textContent = "Already paid? Check this order";
+      b.addEventListener("click", function () {
+        b.disabled = true;
+        reconcile("manual").then(function () { b.disabled = false; });
+      });
+      return b;
+    }
+
     fetch(base + "/api/paypal/config")
       .then(function (res) {
         if (!res.ok) {
@@ -227,27 +272,38 @@
       })
       .then(function (bundle) {
         if (bundle.info.mode === "sandbox") {
-          say("Sandbox mode — no real money moves. Sign in with a sandbox personal account to run the test.", "warn");
+          say("Sandbox mode — no real money moves. Use the sandbox personal account, not the guest card form.", "warn");
         }
         bundle.pp.Buttons({
           style: { layout: "vertical", shape: "pill", color: "gold", label: "paypal", height: 44 },
           createOrder: function () {
             return postJson(base + "/api/paypal/order", { reference: ORDER_REF }).then(function (d) {
+              lastOrderId = d.id;
               return d.id;
             });
           },
           onApprove: function (data) {
+            lastOrderId = data.orderID || lastOrderId;
             say("Capturing payment…");
-            return postJson(base + "/api/paypal/capture", { orderId: data.orderID, reference: ORDER_REF })
-              .then(function (d) { renderPaid(mount, status, d); });
+            return postJson(base + "/api/paypal/capture", { orderId: lastOrderId, reference: ORDER_REF })
+              .then(function (d) { settle(d); })
+              .catch(function (err) {
+                var message = err && err.message ? err.message : "unknown";
+                return reconcile("manual").then(function (ok) {
+                  if (!ok) say("PayPal approved the payment but the capture failed (" + message +
+                    "). Nothing was charged twice — keep the reference " + ORDER_REF + " and send it to support.", "error");
+                });
+              });
           },
-          onCancel: function () {
-            say("Payment cancelled. Nothing was charged.");
-          },
+          onCancel: function () { return reconcile("cancel"); },
           onError: function (err) {
-            say("PayPal could not finish: " + (err && err.message ? err.message : "unknown") + ". Nothing was charged.", "error");
+            var message = err && err.message ? err.message : "unknown";
+            return reconcile("error").then(function (ok) {
+              if (!ok) say("PayPal could not finish: " + message + ". Nothing was charged.", "error");
+            });
           }
         }).render(mount);
+        mount.appendChild(checkButton());
       })
       .catch(function (err) {
         var message = err && err.message ? err.message : "unknown";

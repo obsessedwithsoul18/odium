@@ -1,0 +1,15 @@
+; Resend sending records for getodium.shop
+; Zone: getodium.shop      (Cloudflare -> DNS -> Records -> Import and Export -> Import)
+; All four must be DNS only (grey cloud). TXT and MX are never proxied anyway.
+; Resend shows the same list at https://resend.com/domains
+
+resend._domainkey.getodium.shop.  TXT    "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/84Ndd2RO1MJ8/2cuI6PcGyIi8YScgv08Be8qRodK7UiOjlT/+fv7FuHTHoQ5k7hznzJ8dcEJ6gI2JZWSJ4TbscAYoaSBAFX3BKgKgl8iU/4VLbuCdIL1+hPWJ14vNHxYLe/Npth+nu+6laZdmadzliDAQ1KDof0nDOYfunoreQIDAQAB"
+send.getodium.shop.               MX     10 feedback-smtp.us-east-1.amazonses.com.
+send.getodium.shop.               TXT    "v=spf1 include:amazonses.com ~all"
+rsend.getodium.shop.              CNAME  send.forge.rmta.net.
+
+; Manual equivalents (Cloudflare wants the name relative to the zone):
+;   Type TXT    Name resend._domainkey        Content p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/84Ndd2RO1MJ8/2cuI6PcGyIi8YScgv08Be8qRodK7UiOjlT/+fv7FuHTHoQ5k7hznzJ8dcEJ6gI2JZWSJ4TbscAYoaSBAFX3BKgKgl8iU/4VLbuCdIL1+hPWJ14vNHxYLe/Npth+nu+6laZdmadzliDAQ1KDof0nDOYfunoreQIDAQAB
+;   Type MX     Name send                    Content feedback-smtp.us-east-1.amazonses.com   Priority 10
+;   Type TXT    Name send                    Content v=spf1 include:amazonses.com ~all
+;   Type CNAME  Name rsend                   Content send.forge.rmta.net

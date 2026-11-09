@@ -249,13 +249,28 @@ async function ppCreateOrder(env, reference) {
   return body;
 }
 
+async function ppGetOrder(env, orderId) {
+  const { ok, status, json: body } = await ppCall(
+    env, `/v2/checkout/orders/${encodeURIComponent(orderId)}`
+  );
+  if (!ok) throw new Error(`ppGetOrder ${status}`);
+  return body;
+}
+
 async function ppCapture(env, orderId) {
   const { ok, status, json: body } = await ppCall(
     env, `/v2/checkout/orders/${encodeURIComponent(orderId)}/capture`,
     { method: 'POST', requestId: `capture-${orderId}` }
   );
-  if (!ok) throw new Error(`ppCapture ${status}`);
-  return body;
+  if (ok) return body;
+
+  // A retried capture returns 422 ORDER_ALREADY_CAPTURED. That is a success
+  // dressed as a failure — read the order back and let the caller inspect it.
+  const detail = JSON.stringify(body || {});
+  if (status === 422 && /ALREADY_CAPTURED/i.test(detail))
+    return ppGetOrder(env, orderId);
+
+  throw new Error(`ppCapture ${status}: ${detail}`.slice(0, 300));
 }
 
 function ppReadCapture(env, order) {
@@ -325,20 +340,22 @@ async function ppClaim(env, capture, extra = {}) {
 // Email via Resend
 // -----------------------------------------------------------------------
 async function sendEmail(env, { to, subject, text, html }) {
-  if (!env.RESEND_KEY) return { ok: false, error: 'RESEND_KEY not set' };
+  if (!env.RESEND_KEY && !env.RESEND_API_KEY) return { ok: false, error: 'RESEND key not set' };
+  const body = {
+    from: env.MAIL_FROM || 'orders@getodium.shop',
+    to: [to],
+    subject,
+    text,
+    html,
+  };
+  if (env.MAIL_REPLY_TO) body.reply_to = [env.MAIL_REPLY_TO];
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${env.RESEND_KEY}`,
+      Authorization: `Bearer ${env.RESEND_KEY || env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      from: env.MAIL_FROM || 'keys@getodium.shop',
-      to: [to],
-      subject,
-      text,
-      html,
-    }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     const body = await res.text();
@@ -380,12 +397,40 @@ async function sendReceiptEmail(env, capture, ref) {
   const brand = env.BRAND_NAME || 'Odium';
   const amount = `${capture.currency} ${capture.amount}`;
   const sandbox = capture.mode === 'sandbox';
-  return sendEmail(env, {
+  const subject = `${sandbox ? '[SANDBOX] ' : ''}${brand} paid — ${ref} — ${amount}`;
+  const text = `Order: ${ref}\nAmount: ${amount}\nPayPal: ${capture.captureId}\nPayer: ${capture.payerName} <${capture.payerEmail}>\nPaid: ${capture.paidAt}\nMode: ${capture.mode}`;
+  const html = `<pre>${ref} — ${amount} — ${capture.captureId}</pre>`;
+
+  const store = await sendEmail(env, {
     to: env.MAIL_TO || 'admin@getodium.shop',
-    subject: `${sandbox ? '[SANDBOX] ' : ''}${brand} paid — ${ref} — ${amount}`,
-    text: `Order: ${ref}\nAmount: ${amount}\nPayPal: ${capture.captureId}\nPayer: ${capture.payerName} <${capture.payerEmail}>\nPaid: ${capture.paidAt}\nMode: ${capture.mode}`,
-    html: `<pre>${ref} — ${amount} — ${capture.captureId}</pre>`,
+    subject, text, html,
   });
+
+  // Buyer copy goes out only once the sending domain is verified at Resend,
+  // so an unverified domain can never make the store receipt fail.
+  if (env.MAIL_BUYER === 'true' && capture.payerEmail) {
+    try {
+      await sendEmail(env, {
+        to: capture.payerEmail,
+        subject: `${brand} receipt — ${ref}`,
+        text: [
+          `Thanks — your payment cleared.`,
+          '',
+          `Order: ${ref}`,
+          `Amount: ${amount}`,
+          `PayPal capture: ${capture.captureId}`,
+          '',
+          `Delivery lands in the Discord within ${env.DELIVERY_MINUTES || 10} minutes:`,
+          env.DISCORD_INVITE || 'https://discord.gg/ojailbreaks',
+          '',
+          `Reply to this email for support — quote ${ref}.`,
+        ].join('\n'),
+        html,
+      });
+    } catch { /* buyer copy is best-effort */ }
+  }
+
+  return store;
 }
 
 // -----------------------------------------------------------------------
@@ -814,6 +859,42 @@ async function handlePayPalCapture(request, env) {
   });
 }
 
+async function handlePayPalReconcile(request, env) {
+  const ip = clientIp(request);
+  if (rateLimit(ip, 30)) return respond(env, request, { error: 'rate limited' }, 429);
+
+  let body;
+  try { body = await request.json(); } catch { return respond(env, request, { error: 'bad json' }, 400); }
+
+  const orderId = String(body.orderId || '');
+  if (!orderId) return respond(env, request, { error: 'missing orderId' }, 400);
+
+  let order   = await ppGetOrder(env, orderId);
+  let capture = ppReadCapture(env, order);
+
+  // APPROVED means the buyer authorised the payment but the popup closed
+  // before the site could capture. Finish the job instead of losing the sale.
+  if (!capture && order.status === 'APPROVED') {
+    order   = await ppCapture(env, orderId);
+    capture = ppReadCapture(env, order);
+  }
+
+  if (!ppIsPaid(env, capture))
+    return respond(env, request, { paid: false, status: order.status || 'UNKNOWN' });
+
+  const ref   = REF.test(capture.reference) ? capture.reference : String(body.reference || '').toUpperCase();
+  const fresh = await ppClaim(env, { ...capture, reference: ref }, { orderId });
+
+  let emailed = false;
+  if (fresh) emailed = (await sendReceiptEmail(env, capture, ref)).ok;
+
+  return respond(env, request, {
+    paid: true, status: 'paid', reference: ref,
+    captureId: capture.captureId, amount: capture.amount,
+    currency: capture.currency, mode: capture.mode, emailed,
+  });
+}
+
 async function handlePayPalWebhook(request, env, ctx) {
   const event = await request.json().catch(() => null);
   if (!event?.event_type) return new Response(null, { status: 400 });
@@ -934,6 +1015,7 @@ export default {
       }
       if (path === '/api/paypal/order'   && method === 'POST') return handlePayPalOrder(request, env);
       if (path === '/api/paypal/capture' && method === 'POST') return handlePayPalCapture(request, env);
+      if (path === '/api/paypal/reconcile' && method === 'POST') return handlePayPalReconcile(request, env);
       if (path === '/api/paypal/webhook' && method === 'POST') return handlePayPalWebhook(request, env, ctx);
 
       return respond(env, request, { error: 'not found' }, 404);
