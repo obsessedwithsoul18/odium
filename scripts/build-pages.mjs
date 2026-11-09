@@ -21,11 +21,22 @@ const SKIP_DIRS = new Set([
   "node_modules",
   "server",
   "worker",
+  "bot",
+  "tools",
   "scripts",
   "goodnight.llc",
   ".git",
   ".github",
   ".wrangler",
+]);
+
+// Dependency manifests describe the repo, not the site.
+const SKIP_FILES = new Set([
+  "package.json",
+  "package-lock.json",
+  "pnpm-lock.yaml",
+  "yarn.lock",
+  "tsconfig.json",
 ]);
 
 // Extensions that are safe to serve.
@@ -41,6 +52,7 @@ const ALLOWED_NAME = new Set(["_headers", "_redirects", "CNAME", "robots.txt", "
 
 function wanted(name) {
   if (ALLOWED_NAME.has(name)) return true;
+  if (SKIP_FILES.has(name)) return false;
   if (name.endsWith(".legacy.js")) return false;
   if (name.startsWith(".")) return false;
   return ALLOWED_EXT.has(extname(name).toLowerCase());
