@@ -847,15 +847,33 @@ async function handlePayPalCapture(request, env) {
   const fresh = await ppClaim(env, { ...capture, reference: ref }, { orderId });
 
   let emailed = false;
+  let keyDelivered = false;
+
   if (fresh) {
-    const sent = await sendReceiptEmail(env, capture, ref);
-    emailed = sent.ok;
+    // Mint a real license key for this payment and email it to the buyer.
+    const licenseKey = mintKey();
+
+    await env.DB.prepare(
+      'INSERT INTO licenses (key, email, created_at) VALUES (?, ?, ?)'
+    ).bind(licenseKey, capture.payerEmail || null, Date.now()).run();
+
+    // Email the key to the buyer's PayPal address.
+    if (capture.payerEmail) {
+      const sent = await sendKeyEmail(env, { to: capture.payerEmail, key: licenseKey });
+      emailed = sent.ok;
+    }
+
+    keyDelivered = true;
+
+    // Admin receipt
+    await sendReceiptEmail(env, capture, ref).catch(() => {});
   }
 
   return respond(env, request, {
     status: 'paid', reference: ref,
     captureId: capture.captureId, amount: capture.amount,
-    currency: capture.currency, mode: capture.mode, emailed,
+    currency: capture.currency, mode: capture.mode,
+    emailed, key_delivered: keyDelivered,
   });
 }
 
@@ -925,8 +943,17 @@ async function handlePayPalWebhook(request, env, ctx) {
     : `RET-${String(capture.captureId).slice(-6).toUpperCase()}`;
 
   ctx.waitUntil((async () => {
-    if (await ppClaim(env, { ...capture, reference: ref }))
-      await sendReceiptEmail(env, capture, ref);
+    if (await ppClaim(env, { ...capture, reference: ref })) {
+      // Mint key and deliver to buyer
+      const licenseKey = mintKey();
+      await env.DB.prepare(
+        'INSERT INTO licenses (key, email, created_at) VALUES (?, ?, ?)'
+      ).bind(licenseKey, capture.payerEmail || null, Date.now()).run();
+      if (capture.payerEmail) {
+        await sendKeyEmail(env, { to: capture.payerEmail, key: licenseKey }).catch(() => {});
+      }
+      await sendReceiptEmail(env, capture, ref).catch(() => {});
+    }
   })());
 
   return new Response(null, { status: 200 });
