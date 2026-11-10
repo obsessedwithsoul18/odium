@@ -67,3 +67,32 @@ CREATE TABLE IF NOT EXISTS builds (
   key_b64    TEXT NOT NULL,
   created_at INTEGER NOT NULL DEFAULT (strftime('%s','now') * 1000)
 );
+
+-- -----------------------------------------------------------------------
+-- Challenges: single-use nonces for challenge-response auth.
+-- Prevents replay attacks — a captured auth request can never be reused.
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS challenges (
+  nonce      TEXT PRIMARY KEY,
+  ip_hash    TEXT NOT NULL,
+  created_at INTEGER NOT NULL DEFAULT (strftime('%s','now') * 1000),
+  used_at    INTEGER
+);
+
+-- Auto-expire old challenges (run periodically or on insert)
+CREATE INDEX IF NOT EXISTS idx_challenges_created ON challenges (created_at);
+
+-- -----------------------------------------------------------------------
+-- Auth log: every auth attempt logged for anomaly detection.
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS auth_log (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  key_hash   TEXT NOT NULL,     -- sha256 of the key, never the key itself
+  ip_hash    TEXT NOT NULL,
+  hwid_hash  TEXT NOT NULL,     -- sha256 of the joined hwid hashes
+  result     TEXT NOT NULL,     -- 'ok' | 'invalid_key' | 'hwid_mismatch' | 'banned' | 'challenge_fail'
+  created_at INTEGER NOT NULL DEFAULT (strftime('%s','now') * 1000)
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_log_key ON auth_log (key_hash);
+CREATE INDEX IF NOT EXISTS idx_auth_log_created ON auth_log (created_at);

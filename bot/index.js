@@ -39,15 +39,31 @@ try {
 
 const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require('discord.js');
 
-const TOKEN    = process.env.DISCORD_TOKEN;
-const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const TOKEN    = (process.env.DISCORD_TOKEN || '').trim();
+const CLIENT_ID = (process.env.DISCORD_CLIENT_ID || '').trim();
 const API_BASE  = (process.env.API_BASE || '').replace(/\/+$/, '');
-const API_SECRET = process.env.API_SECRET || ''; // internal shared secret for bot->worker calls
+const API_SECRET = (process.env.API_SECRET || '').trim(); // internal shared secret for bot->worker calls
 
 if (!TOKEN || !API_BASE) {
   console.error('Missing DISCORD_TOKEN or API_BASE');
   process.exit(1);
 }
+
+// The Worker now authenticates every internal call. Refuse to start without a
+// usable secret instead of sending empty credentials that silently fail (or,
+// worse, succeed against an unhardened deployment).
+if (API_SECRET.length < 16) {
+  console.error('Missing or weak API_SECRET (needs >= 16 chars). Generate one with:');
+  console.error('  node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"');
+  console.error('Then set it here AND as the BOT_SECRET secret on the Worker.');
+  process.exit(1);
+}
+if (!/^https:\/\//i.test(API_BASE) && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(API_BASE)) {
+  console.error('API_BASE must be https:// (http is only allowed for localhost)');
+  process.exit(1);
+}
+
+const REQUEST_TIMEOUT_MS = 8000;
 
 // -----------------------------------------------------------------------
 // Worker API calls
@@ -60,6 +76,7 @@ async function workerPost(path, body) {
       'X-Bot-Secret': API_SECRET,
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
   try { return await res.json(); }
   catch { return { ok: false, err: `HTTP ${res.status}` }; }
@@ -68,6 +85,7 @@ async function workerPost(path, body) {
 async function workerGet(path) {
   const res = await fetch(`${API_BASE}${path}`, {
     headers: { 'X-Bot-Secret': API_SECRET },
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
   try { return await res.json(); }
   catch { return { ok: false, err: `HTTP ${res.status}` }; }
@@ -86,6 +104,12 @@ client.on('interactionCreate', async interaction => {
   if (!interaction.isChatInputCommand()) return;
 
   const { commandName, user } = interaction;
+
+  // Never act on behalf of another bot, and never inside DMs where the reply
+  // could be surfaced by a third-party client.
+  if (user.bot || !interaction.inGuild()) {
+    return interaction.reply({ content: 'Use this in the server.', ephemeral: true }).catch(() => {});
+  }
 
   // All replies are ephemeral — only the user sees them
   await interaction.deferReply({ ephemeral: true });

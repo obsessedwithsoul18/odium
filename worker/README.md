@@ -104,6 +104,11 @@ npx wrangler secret put PAYPAL_LIVE_CLIENT_ID
 npx wrangler secret put PAYPAL_LIVE_SECRET
 npx wrangler secret put PAYPAL_LIVE_WEBHOOK_ID
 npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put HWID_SALT
+npx wrangler secret put BOT_SECRET
+npx wrangler secret put LOADER_SECRET
+npx wrangler secret put WH_SECRET
+npx wrangler secret put ADMIN_SECRET
 ```
 
 Or do the same in the dashboard: **Workers & Pages → retrac-api → Settings → Variables and Secrets → Add → type Secret**.
@@ -117,6 +122,14 @@ Or do the same in the dashboard: **Workers & Pages → retrac-api → Settings �
 | `PAYPAL_LIVE_SECRET` | Secret | same |
 | `PAYPAL_LIVE_WEBHOOK_ID` | Secret | live app → Webhooks |
 | `RESEND_API_KEY` | Secret | resend.com → API Keys → Create (`re_...`) |
+| `HWID_SALT` | Secret | random 32+ bytes. `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `BOT_SECRET` | Secret | random 32+ bytes, **identical** to `API_SECRET` in `bot/.env` |
+| `LOADER_SECRET` | Secret | random 32+ bytes; must match the constant compiled into the loader build |
+| `LOADER_SECRET_LEGACY` | Secret | **temporary.** Old loader builds only. Delete once the fleet is rebuilt |
+| `WH_SECRET` | Secret | storefront webhook HMAC key. Leave unset to keep `POST /webhook` disabled (503) |
+| `ADMIN_SECRET` | Secret | manual `/ban` calls. Optional if you ban through the bot |
+
+Every one of these is fail-closed: a missing value returns `503 not_configured` instead of falling back to a default that exists in this repository. `GET /api/diag` (header `X-Bot-Secret`) prints a boolean per secret so you can confirm what the running Worker actually sees without exposing a single value.
 
 ## 4. Plain values
 

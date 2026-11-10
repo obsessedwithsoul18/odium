@@ -13,7 +13,7 @@ MAIL_TO     = "n4tey4130@gmail.com"
 MAIL_FROM   = "Odium <orders@getodium.shop>"
 MAIL_REPLY_TO = "n4tey4130@gmail.com"
 MAIL_BUYER  = "true"
-CORS_ORIGIN = "https://getodium.shop,https://www.getodium.shop,https://odium.shop,https://www.odium.shop,https://*.pages.dev,http://localhost:8123,http://127.0.0.1:8123"
+CORS_ORIGIN = "https://getodium.shop,https://www.getodium.shop,http://localhost:8123,http://127.0.0.1:8123"
 
 # Secrets (set with `wrangler secret put NAME`):
 #   HWID_SALT, WH_SECRET, RESEND_KEY, DISCORD_BOT_TOKEN, ADMIN_SECRET
