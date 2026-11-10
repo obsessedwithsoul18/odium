@@ -96,3 +96,13 @@ CREATE TABLE IF NOT EXISTS auth_log (
 
 CREATE INDEX IF NOT EXISTS idx_auth_log_key ON auth_log (key_hash);
 CREATE INDEX IF NOT EXISTS idx_auth_log_created ON auth_log (created_at);
+
+-- -----------------------------------------------------------------------
+-- Migrate builds table: add active/revoked status and release metadata.
+-- Safe to run multiple times (ADD COLUMN fails silently if already exists
+-- in SQLite, so wrangler's --command mode won't error on reruns).
+-- -----------------------------------------------------------------------
+ALTER TABLE builds ADD COLUMN active INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE builds ADD COLUMN channel TEXT NOT NULL DEFAULT 'stable';
+ALTER TABLE builds ADD COLUMN revoked_at INTEGER;
+ALTER TABLE builds ADD COLUMN revoke_reason TEXT;
