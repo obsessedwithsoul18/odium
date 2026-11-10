@@ -670,7 +670,7 @@ async function handlePayload(req, env) {
 
   await env.DB.prepare('UPDATE sessions SET last_seen=? WHERE token=?').bind(Date.now(), tokenHash).run();
 
-  return j({ ok: true, k: wrapped, ts, blob: btoa(bin) });
+  return j({ ok: true, k: wrapped, ts, ipHash, blob: btoa(bin) });
 }
 
 /**
